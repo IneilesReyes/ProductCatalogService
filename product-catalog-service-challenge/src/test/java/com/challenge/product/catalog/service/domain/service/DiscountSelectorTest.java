@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,7 +29,7 @@ class DiscountSelectorTest {
     @DisplayName("Test calculateDiscount WHEN one strategy is applicable THEN returns product with discount applied.")
     void calculateDiscount_oneApplicableStrategy_returnsDiscountedProduct() {
         Product product = easyRandom.nextObject(Product.class);
-        BigDecimal discount = BigDecimal.valueOf(10.00);
+        BigDecimal discount = BigDecimal.valueOf(10.00).setScale(2, RoundingMode.HALF_UP);
 
         discountSelector = new DiscountSelector(List.of(strategyMock));
 
@@ -37,7 +38,7 @@ class DiscountSelectorTest {
 
         Product result = discountSelector.calculateDiscount(product);
 
-        assertEquals(product.getListPrice().subtract(discount), result.getFinalPrice());
+        assertEquals(product.getListPrice().subtract(discount).setScale(2, RoundingMode.HALF_UP), result.getFinalPrice());
         assertEquals(discount, result.getDiscountApplied());
         verify(strategyMock, times(1)).isApplicable(product);
         verify(strategyMock, times(1)).calculateDiscount(product.getListPrice());
@@ -54,8 +55,8 @@ class DiscountSelectorTest {
 
         Product result = discountSelector.calculateDiscount(product);
 
-        assertEquals(product.getListPrice(), result.getFinalPrice());
-        assertEquals(BigDecimal.ZERO, result.getDiscountApplied());
+        assertEquals(product.getListPrice().setScale(2, RoundingMode.HALF_UP), result.getFinalPrice());
+        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), result.getDiscountApplied());
         verify(strategyMock, times(1)).isApplicable(product);
         verify(strategyMock, never()).calculateDiscount(any());
     }
@@ -64,8 +65,8 @@ class DiscountSelectorTest {
     @DisplayName("Test calculateDiscount WHEN multiple strategies are applicable THEN returns product with the highest discount applied.")
     void calculateDiscount_multipleApplicableStrategies_returnsHighestDiscount() {
         Product product = easyRandom.nextObject(Product.class);
-        BigDecimal lowerDiscount = BigDecimal.valueOf(5.00);
-        BigDecimal higherDiscount = BigDecimal.valueOf(20.00);
+        BigDecimal lowerDiscount = BigDecimal.valueOf(5.00).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal higherDiscount = BigDecimal.valueOf(20.00).setScale(2, RoundingMode.HALF_UP);
 
         DiscountCalculatorStrategy secondStrategyMock = mock(DiscountCalculatorStrategy.class);
         discountSelector = new DiscountSelector(List.of(strategyMock, secondStrategyMock));
@@ -77,7 +78,7 @@ class DiscountSelectorTest {
 
         Product result = discountSelector.calculateDiscount(product);
 
-        assertEquals(product.getListPrice().subtract(higherDiscount), result.getFinalPrice());
+        assertEquals(product.getListPrice().subtract(higherDiscount).setScale(2, RoundingMode.HALF_UP), result.getFinalPrice());
         assertEquals(higherDiscount, result.getDiscountApplied());
     }
 }
