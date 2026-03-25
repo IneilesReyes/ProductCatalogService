@@ -8,8 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.math.BigDecimal;
-
 @Mapper(componentModel = "spring")
 public interface ProductCatalogMapper {
 
@@ -19,17 +17,9 @@ public interface ProductCatalogMapper {
     }
 
     @Mapping(target = "category", source = "category", qualifiedByName = "categoryToString")
-    @Mapping(source = "discountApplied", target = "discountApplied", qualifiedByName = "bigDecimalToString")
     ProductResponseDto toDTO(Product product);
 
     @Mapping(source = "price", target = "listPrice")
     Product toModel(ProductEntity productEntity);
-
-    @Named("bigDecimalToString")
-    default String bigDecimalToString(BigDecimal value) {
-        return value != null
-                ? value.multiply(BigDecimal.valueOf(100)).toPlainString() + "%"
-                : "0%";
-    }
 
 }

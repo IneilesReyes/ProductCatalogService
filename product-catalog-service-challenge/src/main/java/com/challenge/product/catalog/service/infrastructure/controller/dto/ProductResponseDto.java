@@ -12,7 +12,7 @@ public class ProductResponseDto {
     private String description;
     private BigDecimal listPrice;
     private String category;
-    private String discountApplied;
+    private BigDecimal discountApplied;
     private BigDecimal finalPrice;
 
 }
