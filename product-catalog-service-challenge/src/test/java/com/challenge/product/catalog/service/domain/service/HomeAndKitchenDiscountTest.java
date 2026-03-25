@@ -1,7 +1,7 @@
 package com.challenge.product.catalog.service.domain.service;
 
 import com.challenge.product.catalog.service.domain.model.Product;
-import org.jeasy.random.EasyRandom;
+import com.challenge.product.catalog.service.testUtils.Utils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HomeAndKitchenDiscountTest {
 
-    private final EasyRandom easyRandom = new EasyRandom();
     private final HomeAndKitchenDiscount homeAndKitchenDiscount = new HomeAndKitchenDiscount();
 
     @Test

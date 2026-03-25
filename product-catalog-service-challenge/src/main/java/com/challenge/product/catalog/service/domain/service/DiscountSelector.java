@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DiscountSelector {
 
-    private List<DiscountCalculatorStrategy> discountCalculators;
+    private final List<DiscountCalculatorStrategy> discountCalculators;
 
     public DiscountSelector(List<DiscountCalculatorStrategy> discountCalculators) {
         this.discountCalculators = discountCalculators;
@@ -19,11 +19,10 @@ public class DiscountSelector {
                 .filter(dc -> dc.isApplicable(product))
                 .map(dc -> dc.calculateDiscount(product.getListPrice()))
                 .max(BigDecimal::compareTo)
-                .orElse(BigDecimal.ZERO)
-                .setScale(2, RoundingMode.HALF_UP);
+                .orElse(BigDecimal.ZERO);
 
         return product.toBuilder()
-                .finalPrice(product.getListPrice().subtract(discount).setScale(2, RoundingMode.HALF_UP))
+                .finalPrice(product.getListPrice().subtract(discount).setScale(2, RoundingMode.HALF_DOWN))
                 .discountApplied(discount)
                 .build();
     }

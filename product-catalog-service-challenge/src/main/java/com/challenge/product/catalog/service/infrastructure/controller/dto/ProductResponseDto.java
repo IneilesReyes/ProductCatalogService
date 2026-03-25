@@ -14,5 +14,4 @@ public class ProductResponseDto {
     private String category;
     private BigDecimal discountApplied;
     private BigDecimal finalPrice;
-
 }

@@ -1,4 +1,4 @@
-package com.challenge.product.catalog.service.domain.service;
+package com.challenge.product.catalog.service.testUtils;
 
 import com.challenge.product.catalog.service.domain.model.Category;
 import com.challenge.product.catalog.service.domain.model.Product;

@@ -48,7 +48,7 @@ class ProductCatalogServiceTest {
         Product discountedProduct = easyRandom.nextObject(Product.class);
         Page<Product> productPage = new PageImpl<>(List.of(product));
 
-        when(productCatalogPort.findByCategoryName(null, pageable)).thenReturn(productPage);
+        when(productCatalogPort.findAll(pageable)).thenReturn(productPage);
         when(discountSelector.calculateDiscount(product)).thenReturn(discountedProduct);
 
         Page<Product> result = productService.getProductCatalog(null, pageable);
@@ -56,7 +56,8 @@ class ProductCatalogServiceTest {
         assertEquals(1, result.getContent().size());
         assertEquals(discountedProduct, result.getContent().get(0));
         verify(categoryPort, never()).exists(any());
-        verify(productCatalogPort, times(1)).findByCategoryName(null, pageable);
+        verify(productCatalogPort, never()).findByCategoryName(any(), any());
+        verify(productCatalogPort, times(1)).findAll(pageable);
         verify(discountSelector, times(1)).calculateDiscount(product);
     }
 
@@ -77,6 +78,7 @@ class ProductCatalogServiceTest {
 
         assertEquals(1, result.getContent().size());
         assertEquals(discountedProduct, result.getContent().get(0));
+        verify(productCatalogPort, never()).findAll(any());
         verify(categoryPort, times(1)).exists(category);
         verify(productCatalogPort, times(1)).findByCategoryName(category, pageable);
         verify(discountSelector, times(1)).calculateDiscount(product);

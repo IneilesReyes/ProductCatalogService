@@ -56,7 +56,7 @@ class DiscountSelectorTest {
         Product result = discountSelector.calculateDiscount(product);
 
         assertEquals(product.getListPrice().setScale(2, RoundingMode.HALF_UP), result.getFinalPrice());
-        assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), result.getDiscountApplied());
+        assertEquals(BigDecimal.ZERO, result.getDiscountApplied());
         verify(strategyMock, times(1)).isApplicable(product);
         verify(strategyMock, never()).calculateDiscount(any());
     }

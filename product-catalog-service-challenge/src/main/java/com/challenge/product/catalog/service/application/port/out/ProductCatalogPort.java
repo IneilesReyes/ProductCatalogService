@@ -7,5 +7,6 @@ import org.springframework.data.domain.Pageable;
 public interface ProductCatalogPort {
 
     Page<Product> findByCategoryName(String category, Pageable pageable);
+    Page<Product> findAll(Pageable pageable);
 
 }

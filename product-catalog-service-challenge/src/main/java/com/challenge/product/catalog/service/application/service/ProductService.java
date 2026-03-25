@@ -10,6 +10,8 @@ import com.challenge.product.catalog.service.domain.service.DiscountSelector;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public class ProductService implements GetProductCatalogUseCase {
 
     private static final String FETCH_ERROR_TEMPLATE = "category: %s";
@@ -40,7 +42,9 @@ public class ProductService implements GetProductCatalogUseCase {
 
     private Page<Product> fetchProducts(String category, Pageable pageable) {
         try {
-            return productCatalogPort.findByCategoryName(category, pageable);
+            return Optional.ofNullable(category)
+                    .map(cat -> productCatalogPort.findByCategoryName(cat, pageable))
+                    .orElseGet(() -> productCatalogPort.findAll(pageable));
         } catch (Exception e) {
             throw new RepositoryException(
                     "Error retrieving product catalog - " +
