@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS category;
+
 CREATE TABLE IF NOT EXISTS category (
                                         id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                                         name VARCHAR(150) NOT NULL UNIQUE
